@@ -1,10 +1,14 @@
 import Task from "../models/Task.js";
+import Column from "../models/Column.js";
 
-// GET all tasks
+// GET all tasks with columns
 export const getTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.json(tasks);
+    const [tasks, columns] = await Promise.all([
+      Task.find(),
+      Column.find().sort({ order: 1 })
+    ]);
+    res.json({ tasks, columns });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
